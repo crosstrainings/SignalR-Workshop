@@ -14,7 +14,7 @@ namespace SignalDemo
     {
         public void Hello()
         {
-            Clients.All.hello();
+            Clients.All.hello();//Some Comment HERE
         }
 
         public override Task OnConnected()
