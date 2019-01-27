@@ -20,7 +20,7 @@ namespace SignalDemo
         public override Task OnConnected()
         {
             var UserId= Context.User.Identity.GetUserId();
-            var ConnId = Context.ConnectionId;
+            string ConnId = Context.ConnectionId;
             return Groups.Add(ConnId, UserId);
         }
 
