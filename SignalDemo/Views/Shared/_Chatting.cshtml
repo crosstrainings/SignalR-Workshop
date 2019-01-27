@@ -1,0 +1,106 @@
+﻿@using SignalDemo.DbModels
+@model List<Message>
+@using Microsoft.AspNet.Identity;
+
+
+<div class="card">
+    <div class="card-header msg_head">
+        <div class="d-flex bd-highlight">
+            <div class="img_cont">
+                <img src="https://devilsworkshop.org/files/2013/01/enlarged-facebook-profile-picture.jpg" class="rounded-circle user_img">
+                <span class="online_icon"></span>
+            </div>
+            <div class="user_info">
+                <span>Chat with <span class="Chatwith">?</span></span>
+                <p>@Model.Count Messages</p>
+            </div>
+            <div class="video_cam">
+                <span><i class="fas fa-video"></i></span>
+                <span><i class="fas fa-phone"></i></span>
+            </div>
+        </div>
+        <span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
+        <div class="action_menu">
+            <ul>
+                <li><i class="fas fa-user-circle"></i> View profile</li>
+                <li><i class="fas fa-users"></i> Add to close friends</li>
+                <li><i class="fas fa-plus"></i> Add to group</li>
+                <li><i class="fas fa-ban"></i> Block</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card-body msg_card_body">
+        @foreach (var item in Model)
+        {
+            if (Convert.ToInt32(User.Identity.GetUserId()) != item.FromUserId)
+            {
+                <div class="d-flex justify-content-start mb-4" id="abc">
+                    <div class="img_cont_msg">
+                        <img src="https://devilsworkshop.org/files/2013/01/enlarged-facebook-profile-picture.jpg" class="rounded-circle user_img_msg">
+                    </div>
+                    <div class="msg_cotainer">
+                        @item.Messages
+                        <span class="msg_time">@item.SentDate.ToString("h:mm tt"), Today</span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex justify-content-end mb-4" id="">
+                    <div class="msg_cotainer_send">
+                        @item.Messages
+                        <span class="msg_time_send">@item.SentDate.ToString("h:mm tt"), Today</span>
+                    </div>
+                    <div class="img_cont_msg">
+                        <img src="https://devilsworkshop.org/files/2013/01/enlarged-facebook-profile-picture.jpg" class="rounded-circle user_img_msg">
+                    </div>
+                </div>
+            }
+
+        }
+    </div>
+    <div class="card-footer">
+        <div class="input-group">
+            <div class="input-group-append">
+                <span class="input-group-text attach_btn" style="width:195px;"><i class="fas fa-paperclip"></i></span>
+            </div>
+            <textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
+            <div class="input-group-append SendMessage">
+                <span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".SendMessage").click(function () {
+        debugger;
+        var message = $(this).siblings('.type_msg').val();
+        var friendId = _friendid;
+        $.ajax({
+            url: '/Home/SaveMessages',
+            method: 'POST',
+            data: { FriendId: friendId, Messages: message },
+            //success: function (data) {
+            success: function (data) {
+                debugger;
+                $('#Chatting').html(data);
+                $(".msg_card_body").scrollTop(100000000000000000);
+                $('.Chatwith').text(_friendName);
+
+
+
+
+                myhub.server.updateMessages(_friendid);
+
+
+
+
+            },
+            error: function () {
+                alert("save");
+                alert("Something went Worng.");
+            }
+        });
+    });
+</script>
